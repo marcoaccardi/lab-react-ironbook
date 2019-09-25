@@ -36,6 +36,7 @@ class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.campus);
     return (
       <div className="App">
         <label htmlFor="search">Search</label>
@@ -63,7 +64,13 @@ class App extends React.Component {
           onChange={this.onHandleCheckBoxChange}
         />
         <label htmlFor="campus">Campus</label>
-        <select name="campus" id="campus" onChange={this.onHandleSelectChange}>
+        <select
+          name="campus"
+          id="campus"
+          value={this.state.campus}
+          onChange={this.onHandleSelectChange}
+        >
+          <option value="">--</option>
           {users
             .map(user => user.campus)
             .filter((user, index, users) => users.indexOf(user) === index)
@@ -96,7 +103,9 @@ class App extends React.Component {
                   (user.role === "teacher" && this.state.teacher)
               )
               .filter(user => {
-                return user.campus.includes(this.state.campus);
+                return (
+                  user.campus.includes(this.state.campus) || !this.state.campus
+                );
               })
               .map(user => {
                 return (
