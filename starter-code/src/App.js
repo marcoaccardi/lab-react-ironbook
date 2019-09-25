@@ -7,7 +7,8 @@ class App extends React.Component {
     users: users,
     search: "",
     student: true,
-    teacher: true
+    teacher: true,
+    campus: ""
   };
   onHandleSearch = e => {
     const { name, value } = e.target;
@@ -27,6 +28,13 @@ class App extends React.Component {
       () => console.log(this.state.checked)
     );
   };
+  onHandleSelectChange = e => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -54,6 +62,19 @@ class App extends React.Component {
           checked={this.state.teacher}
           onChange={this.onHandleCheckBoxChange}
         />
+        <label htmlFor="campus">Campus</label>
+        <select name="campus" id="campus" onChange={this.onHandleSelectChange}>
+          {users
+            .map(user => user.campus)
+            .filter((user, index, users) => users.indexOf(user) === index)
+            .map(campus => {
+              return (
+                <option key={campus} value={campus}>
+                  {campus}
+                </option>
+              );
+            })}
+        </select>
         <table>
           <tbody>
             <tr>
@@ -74,6 +95,9 @@ class App extends React.Component {
                   (user.role === "student" && this.state.student) ||
                   (user.role === "teacher" && this.state.teacher)
               )
+              .filter(user => {
+                return user.campus.includes(this.state.campus);
+              })
               .map(user => {
                 return (
                   <tr key={user.firstName + user.lastName}>
